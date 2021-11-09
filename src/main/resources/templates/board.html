@@ -5,21 +5,44 @@
 <title>掲示板</title>
 </head>
 <body>
-<form th:action="@{/article/insert}" method="post" th:object="${articleForm}">
+<form th:action="@{/article/insertA}" method="post" th:object="${articleForm}">
 投稿者名：<input type="text" th:field="*{name}"><br>
 投稿内容：<textarea rows="4" cols="30" th:field="*{content}"></textarea><br>
 <button>送信</button>
 </form>
+
+
 <div th:each="art:${artList}">
-<hr>
-投稿者名：<span th:text="${art.name}"></span><br>
-投稿内容：<th:block th:if="${art.content}"><th:block th:each="str, stat : ${art.content.split('\r\n|\r|\n', -1)}"><th:block th:text="${str}"/>
-<br th:if="${!stat.last}"/>
-</th:block>
-</th:block>
-<form th:action="@{/article/delete}" method="post">
-<button th:value="${art.id}" name="id">記事を削除</button>
-</form>
+
+
+	<hr>
+	投稿者名：<span th:text="${art.name}"></span><br>
+	
+	投稿内容：<th:block th:if="${art.content}"><th:block th:each="str, stat : ${art.content.split('\r\n|\r|\n', -1)}"><th:block th:text="${str}"/>
+		<br th:if="${!stat.last}"/>
+		</th:block>
+		</th:block>
+	
+	<form th:action="@{/article/delete}" method="post">
+		<button th:value="${art.id}" name="id">記事を削除</button>
+	</form>
+	
+	<div th:each="com:${art.commentList}">
+		コメント者名：<span th:text="${com.name}"></span><br>
+		コメント内容：<div th:text="${com.content}"></div>
+	</div> 
+	
+	<form th:action="@{/article/insertC}" method="post" th:object="${commentForm}">
+	名前：<br>
+	<input type="text" th:field="*{name}">
+	コメント：<br>
+	<textarea rows="4" cols="30" th:field="*{content}"></textarea>
+	
+	<input type="hidden" th:value="${art.id}" name="articleId">
+	
+	<button>投稿</button>
+	</form >
+	
 </div>
 
 </body>
