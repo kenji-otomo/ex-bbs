@@ -7,12 +7,19 @@
 <body>
 <form th:action="@{/article/insert}" method="post" th:object="${articleForm}">
 投稿者名：<input type="text" th:field="*{name}"><br>
-投稿内容：<textarea rows="4" cols="30" th:field="*{content}"></textarea>
+投稿内容：<textarea rows="4" cols="30" th:field="*{content}"></textarea><br>
+<button>送信</button>
 </form>
 <div th:each="art:${artList}">
 <hr>
-<div th:text="${art.name}"></div>
-<div th:text="${art.content}"></div>
+投稿者名：<span th:text="${art.name}"></span><br>
+投稿内容：<th:block th:if="${art.content}"><th:block th:each="str, stat : ${art.content.split('\r\n|\r|\n', -1)}"><th:block th:text="${str}"/>
+<br th:if="${!stat.last}"/>
+</th:block>
+</th:block>
+<form th:action="@{/article/delete}" method="post">
+<button th:value="${art.id}" name="id">記事を削除</button>
+</form>
 </div>
 
 </body>
